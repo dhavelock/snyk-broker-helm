@@ -1,0 +1,18 @@
+name: Snyk example 
+on: push
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: snyk/actions/setup@master
+    - name: Generate Kubernetes YAML
+      uses: WyriHaximus/github-action-helm3@v3
+      with:
+        exec: helm template ./charts/snyk-broker --output-dir ./output
+    - name: Snyk IaC 
+      run: |
+        ls ./output
+        snyk iac test ./output
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
