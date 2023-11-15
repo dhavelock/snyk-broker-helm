@@ -1,4 +1,4 @@
-name: Snyk example 
+name: Snyk IaC Helm 
 on: push
 jobs:
   security:
@@ -11,8 +11,6 @@ jobs:
       with:
         exec: helm template ./charts/snyk-broker --output-dir ./output
     - name: Snyk IaC 
-      run: |
-        ls ./output
-        snyk iac test ./output
+      run: snyk iac test ./output
       env:
         SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
